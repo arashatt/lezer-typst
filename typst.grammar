@@ -1,14 +1,16 @@
 @top Program {expression*}
-@skip {Comment | Space}
-expression {Auto|Boolean|Integer|Float|Length}
+@skip {Comment | space}
+expression {Auto|Boolean|Integer|Float|Length|Identifier}
+Boolean { @specialize<Identifier,"true"|"false"> }
+Auto { @specialize<Identifier,"auto"> }
+
 @tokens {
-  Space {@whitespace+}
-  Comment { "//" ![\n]* }
-  Auto {"auto"}
-  Boolean {"true"|"false"}
-  Integer { "0x"(@digit$[a-f])+|@digit+ }
-  Float {Integer($[.] Integer|"e"Integer)}
-  @precedence {Integer,Length,Float}
-  Length {Integer("pt"|"mm"|"cm"|"in")| Float "em"}
+  space       { @whitespace+ }
+  Comment     { "//" ![\n]* }
+  Integer     { "0x"(@digit$[a-f])+|@digit+ }
+  Float       { Integer($[.] Integer|"e"Integer) }
+  Length      { Integer("pt"|"mm"|"cm"|"in")| Float "em" }
+  Identifier  { $[a-zA-Z_]+ }
+  @precedence { Length, Float, Integer }
 
 }

@@ -7,7 +7,11 @@ fs.readFile('test.txt', 'utf8', (err, data) => {
     console.error(err);
     return;
   }
-let output = parser.parse(data);
-console.log(output.TreeBuffer);
+let tree = parser.parse(data);
+let cursor = tree.cursor()
+do {
+  console.log(`Node ${cursor.name} is ${data.substring(cursor.from, cursor.to)}`)
+} while (cursor.next())
+
 });
 
